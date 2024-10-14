@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Midnight in the Gorgon City</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="shortcut icon" href="./img/icon.png" type="image/x-icon">
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+</head>
+<body>
+    <div class="game-container" id="game-container">
+        <div id="sky"></div>
+        <div id="bg-decor"></div>
+        <div id="middle-decor"></div>
+        <div id="foreground"></div>
+        <div id="transparent"></div>
+        <div id="ground"></div>
+        
+        <div class="info">
+            <div class="game-info">
+                <img src="./img/heart.png" alt="salud">
+                <div id="health-points"></div>
+
+                <img src="./img/Flight_Bonus_04.png" id="bonus-img" alt="bonus power" width="24" height="18">
+                <div id="bonus-power"></div>
+            </div>
+
+            <div class="game-info" id="level-info">Nivel</div>
+
+            <div class="game-info">
+                <img src="./img/time.png" alt="tiempo">
+                <div id="time">time</div>
+
+                <div id="score">Puntos: 00</div>
+            </div>
+        </div>      
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modal-content">
+            <img id="logo" src="./img/text_logo.png" alt="logo">
+            <div class="controls">
+                <div>Salto
+                    <img src="./img/up-arrow.png" alt="tecla flecha arriba">
+                </div>
+                <div>Ataque
+                    <img src="./img/letter-x.png" alt="tecla x">
+                </div>
+                <div>Bonus de salud
+                    <img src="./img/HP_Bonus_04.png" alt="bonus de salud" width="28" height="24"/>
+                </div>
+                <div>Bonus de poder
+                    <img src="./img/Flight_Bonus_04.png" alt="bonus de salud" width="32" height="24"/>
+                </div>
+            </div>
+            <button id="skip-modal">Jugar</button>
+        </div>
+    </div>
+
+    <div class="modal hide-modal" id="game-over-modal">
+        <div class="modal-content" id="modal-content">
+            <h2>Game Over</h2>
+            <h3 class="round-score" id="round-score">Puntuacion: </h3>
+            <h3 id="max-score"></h3>
+            <button id="restart-game">Reiniciar</button>
+        </div>
+    </div>
+    
+    <script type="module" src='./js/main.js'></script>
+</body>
+</html>

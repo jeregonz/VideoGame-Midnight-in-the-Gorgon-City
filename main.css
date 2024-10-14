@@ -1,0 +1,426 @@
+:root {
+    --player-top: 148px;
+    --character-z-index: 20;
+    --bonus-drop-shadow: drop-shadow(0px 0px 15px #df07ff);
+    --gorgon-scale: scale(1.2) scaleX(-1);
+    --gorgon-health-bar: linear-gradient(to right, red 0%, red 100%, #ffffff 100%, #ffffff 100%);
+}
+
+body {
+    background-color: #000;
+    margin: 0;
+    overflow: hidden;
+    height: 100dvh;
+    image-rendering: pixelated;
+    display: flex;
+    align-items: center;
+    font-family: sans-serif;
+    color: white;
+}
+
+.game-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+#sky {
+    background: url(./img/background/Sky.png) center / contain repeat fixed;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#bg-decor {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url(./img/background/BG_Decor.png) repeat-x;
+    background-size: contain;
+    z-index: 5;
+}
+
+#middle-decor {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url(./img/background/Middle_Decor.png) repeat-x;
+    background-size: contain;
+    z-index: 7;
+}
+
+.middle-decor-moving {
+    animation: movebg 40s linear infinite;
+}
+
+#foreground {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url(./img/background/Foreground.png) repeat-x;
+    background-size: contain;
+    z-index: 10;
+}
+
+.foreground-moving {
+    animation: movebg 20s linear infinite;
+}
+
+#transparent {
+    position: absolute;
+    z-index: 11;
+    background-color: rgb(40 201 102 / 20%);
+    width: 100%;
+    height: 100%;
+}
+
+#ground {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url(./img/background/floor.png) repeat-x;
+    background-size: contain;
+    z-index: 50;
+    height: 65px;
+    top: 340px;
+}
+
+.ground-moving {
+    animation: movebg 15s linear infinite;
+}
+
+@keyframes movebg {
+    0% {
+        background-position: 1920px
+    }
+
+    100% {
+        background-position: 0
+    }
+}
+
+/************* jugador ****************/
+.player {
+    width: 128px;
+    height: 128px;
+
+    position: relative;
+    top: var(--player-top);
+    left: 50px;
+    z-index: var(--character-z-index);
+}
+
+.run {
+    transform: scale(2);
+    background: url(./img/wanderer_magican/Run.png);
+    animation: run .8s steps(8) infinite;
+}
+
+.jump {
+    transform: scale(2);
+    background: url(./img/wanderer_magican/Jump.png);
+    animation: jump 1s steps(5);
+}
+
+.attack {
+    transform: scale(2);
+    background: url(./img/wanderer_magican/Attack_2.png);
+    animation: attack .2s steps(9);
+}
+
+.die {
+    transform: scale(2);
+    background: url(./img/wanderer_magican/Dead.png);
+    animation: die .3s steps(4);
+}
+
+.hurt {
+    transform: scale(2);
+    background: url(./img/wanderer_magican/Hurt.png);
+    animation: die .3s steps(4);
+}
+
+@keyframes die {
+    from {
+        background-position-x: 0
+    }
+
+    to {
+        background-position-x: -512px
+    }
+}
+
+@keyframes run {
+    from {
+        background-position-x: 0
+    }
+
+    to {
+        background-position-x: -1024px
+    }
+}
+
+@keyframes jump {
+    0% {
+        transform: translateY(0) scale(2);
+        background-position-x: -384px
+    }
+
+    25% {
+        transform: translateY(-110px) scale(2);
+    }
+
+    50% {
+        transform: translateY(-150px) scale(2);
+    }
+
+    75% {
+        transform: translateY(-110px) scale(2);
+    }
+
+    100% {
+        transform: translateY(0) scale(2);
+        background-position-x: -1024px
+    }
+}
+
+@keyframes attack {
+    from {
+        background-position-x: 0
+    }
+
+    to {
+        background-position-x: -1152px
+    }
+}
+
+.magic-spell {
+    position: absolute;
+    z-index: var(--character-z-index);
+
+    top: 255px;
+
+    height: 8px;
+    width: 64px;
+
+    background: url(./img/wanderer_magican/Charge_22.png) no-repeat;
+    transform: scale(3);
+    background-position-x: -256px;
+}
+
+/************* enemigos ****************/
+.gorgon {
+    width: 128px;
+    height: 128px;
+    position: absolute;
+    top: 200px;
+    z-index: var(--character-z-index);
+}
+
+.gorgon::before {
+    position: absolute;
+    width: 50px;
+    height: 8px;
+    background: var(--gorgon-health-bar);
+    border: 1px solid #ffffff;
+    content: "";
+    display: block;
+    bottom: 90px;
+    left: 32px;
+    box-sizing: border-box;
+}
+
+.gorgon-idle {
+    background: url(./img/gorgon_1/Idle.png);
+    animation: gorgon-idle .8s steps(7) infinite;
+    transform: var(--gorgon-scale);
+}
+
+.gorgon-die {
+    background: url(./img/gorgon_1/Dead.png);
+    animation: gorgon-die .4s steps(3);
+    transform: var(--gorgon-scale);
+}
+
+.gorgon-hurt {
+    background: url(./img/gorgon_1/Hurt.png);
+    animation: gorgon-die .3s steps(3);
+    transform: var(--gorgon-scale);
+}
+
+@keyframes gorgon-idle {
+    from {
+        background-position-x: 0
+    }
+
+    to {
+        background-position-x: -896px
+    }
+}
+
+@keyframes gorgon-die {
+    from {
+        background-position-x: 0
+    }
+
+    to {
+        background-position-x: -384px
+    }
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    z-index: 50;
+    width: 100%;
+    top: 0px;
+}
+
+.game-info {
+    background-color: black;
+    font-weight: bolder;
+    font-style: italic;
+    user-select: none;
+    width: fit-content;
+    box-shadow: 1px 1px 5px 2px black;
+    padding-inline: 8px;
+    padding-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.game-info #bonus-img {
+    margin-left: 16px;
+}
+
+@keyframes flashBackground {
+    0% { background-color: black; }
+    50% { background-color: yellow; }
+    100% { background-color: black; }
+}
+
+/* Clase que aplica la animación */
+.flash {
+    animation: flashBackground 1s ease;
+}
+
+.game-info {
+    right: 0px;
+
+    #score {
+        margin-inline: 8px;
+    }
+}
+
+/************* objetos / iconos ****************/
+.obstacle {
+    background: url(./img/Pad_3_4.png) no-repeat;
+    background-size: contain;
+    position: absolute;
+    z-index: 50;
+    width: 120px;
+    height: 140px;
+    top: 300px;
+}
+
+.hp-bonus {
+    background: url(./img/HP_Bonus_04.png) no-repeat;
+    background-size: contain;
+    position: absolute;
+    z-index: 50;
+    width: 60px;
+    height: 50px;
+    top: 150px;
+    filter: var(--bonus-drop-shadow);
+}
+
+.power-bonus {
+    background: url(./img/Flight_Bonus_04.png) no-repeat;
+    background-size: contain;
+    position: absolute;
+    z-index: 50;
+    width: 90px;
+    height: 50px;
+    top: 150px;
+    /* right: 20px; */
+    filter: var(--bonus-drop-shadow);
+}
+
+.modal {
+    --modal-size: 100%;
+    --content-size: 80%;
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: var(--modal-size);
+    height: var(--modal-size);
+    background-color: #000000cc;
+    color: white;
+    font-weight: bold;
+}
+
+.modal-content {
+    min-width: fit-content;
+    min-height: fit-content;
+    width: var(--content-size);
+    height: var(--content-size);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8px;
+    align-items: center;
+    background: linear-gradient(45deg, #2e3346, #19104c);
+    background-size: cover;
+    border-radius: 20px;
+}
+
+#logo {
+    max-height: 20%;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+}
+
+.controls div {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+button {
+    border: 0;
+    margin: 0;
+    background-color: transparent;
+    color: white;
+    font-weight: bold;
+    font-size: larger;
+    border: 2px solid white;
+    border-radius: 4px;
+    padding-block: 8px;
+    padding-inline: 16px;
+    cursor: pointer;
+}
+
+.hide-modal {
+    display: none;
+}
+
+/*game over modal*/
+#game-over-modal .modal-content {
+    justify-content: center;
+
+    button {
+        margin: 16px;
+    }
+}
