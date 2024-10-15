@@ -1,7 +1,7 @@
 import { Character } from "./Character.js";
 import { gameContainer, renderHealthPoints } from "./Context.js";
 
-const initialHP = 10
+const initialHP = 20
 
 export class Player extends Character {
 
@@ -9,10 +9,9 @@ export class Player extends Character {
         super(initialHP)
         this.container = gameContainer
         this.element = this.createElement()
-        this.iniTop = this.getDOMInfo().top
         this.bonusPower = 0
-        this.canAttack = true
-        this.isJumping = false
+        this._canAttack = true
+        this._isJumping = false
     }
 
     reset(){
@@ -25,12 +24,20 @@ export class Player extends Character {
         const playerElement = document.createElement('div')
         playerElement.classList.add('player')
         playerElement.classList.add('run')
-        this.container.appendChild(playerElement) // Agregar al contenedor
+        this.container.appendChild(playerElement)
         return playerElement
     }
 
-    getIniTop(){
-        return this.iniTop
+    isJumping() {
+        return this._isJumping
+    }
+
+    canAttack() {
+        return this._canAttack
+    }
+
+    setCanAttack(value) {
+        return this._canAttack = value
     }
 
     getHp() {
@@ -76,12 +83,12 @@ export class Player extends Character {
 
     run() {
         this.addClass('run')
-        this.isJumping = false
+        this._isJumping = false
     }
 
     jump() {
         this.addClass('jump')
-        this.isJumping = true
+        this._isJumping = true
         this.element.addEventListener("animationend", () => {
             this.run()
         })
@@ -95,8 +102,6 @@ export class Player extends Character {
     }
 
     die(){
-        console.log(`${this.constructor.name} ha muerto.`)
-        // Aquí puedes manejar la lógica de la muerte (ej: remover del DOM, animación de muerte, etc.)
         this.dieAnimation()
     }
 

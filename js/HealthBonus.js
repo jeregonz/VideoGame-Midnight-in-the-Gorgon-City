@@ -10,7 +10,6 @@ export class HealthBonus extends PowerBonus{
         const bonus = document.createElement('div')
         bonus.classList.add('hp-bonus')
         bonus.style.left = `${this.x}px`
-        // bonus.style.top = `${this.y}px`
         this.container.appendChild(bonus)
         return bonus
     }
@@ -19,7 +18,6 @@ export class HealthBonus extends PowerBonus{
         // Aplicar el efecto de bonus
         this.player.takeHpBonus(this.bonusAmount)
         renderHealthPoints()
-        console.log("Bonus aplicado: Salud aumentada!")
     }
 
 }

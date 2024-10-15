@@ -304,7 +304,7 @@ body {
 
 /* Clase que aplica la animación */
 .flash {
-    animation: flashBackground 1s ease;
+    animation: flashBackground .3s ease;
 }
 
 .game-info {
@@ -372,16 +372,24 @@ body {
     height: var(--content-size);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 8px;
     align-items: center;
-    background: linear-gradient(45deg, #2e3346, #19104c);
+    background: linear-gradient(45deg, rgb(22 61 209 / 38%), rgb(25 12 96 / 38%));
     background-size: cover;
     border-radius: 20px;
 }
 
+.modal-content main {
+    display: grid;
+    max-height: fit-content;
+    grid-template-columns: 55% auto;
+    align-items: center;
+    width: 90%;
+}
+
 #logo {
-    max-height: 20%;
+    max-height: 35%;
 }
 
 .controls {
@@ -396,6 +404,18 @@ body {
     display: flex;
     gap: 8px;
     align-items: center;
+}
+
+.rules {
+    display: flex;
+    text-wrap: balance;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+.rules p {
+    margin-block: 5px;
 }
 
 button {

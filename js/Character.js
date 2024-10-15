@@ -8,10 +8,8 @@ export class Character {
         return this.element.getBoundingClientRect()
     }
 
-    // Método para recibir daño
     takeDamage(amount) {
         this.hp -= amount
-        console.log(`Recibido ${amount} de daño. HP restante: ${this.hp}`)
 
         if (!this.isDead())
             this.hurt()
@@ -19,7 +17,6 @@ export class Character {
             this.die()
     }
 
-    // Método que se ejecuta cuando el personaje muere
     die() {}
 
     isDead() {

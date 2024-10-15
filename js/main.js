@@ -11,7 +11,34 @@ let obstacles = []
 let gameObjects = [] //objetos como bonus y hechizos
 let gameOver = false
 
+document.addEventListener('keydown', keyDownHandler)
+
+let magicSpellCooldown = 200 // retraso de ataque en ms
+
+let spellPool = [] // Pool para proyectiles
+let poolSize = 30  // Cantidad de proyectiles en el pool
+// Crear el pool con proyectiles inactivos
+for (let i = 0; i < poolSize; i++) {
+    spellPool.push(new MagicSpell()) // Crear inactivos
+}
+
 const levelInfo = document.getElementById('level-info')
+const timeElement = document.getElementById('time')
+let startTime = 0 // El contador empieza desde 0 segundos
+
+// Variables de generación
+let enemySpawnCooldown
+let obstacleSpawnCooldown
+let bonusSpawnCooldown
+
+// Timeouts o intervals
+let enemyTimeoutId, obstacleTimeoutId, bonusTimeoutId, levelTimeoutId, gameTimeId
+
+let level
+let levelUpInterval = 20000 // Cada 20 segundos sube de nivel
+let speedMultiplier = 1 // Comenzar con multiplicador 1x
+let spawnRateMultiplier = 1 // Comenzar con multiplicador 1x
+
 function renderLevel() {
     levelInfo.textContent = 'Nivel: ' + level
     levelInfo.classList.add('flash')
@@ -19,10 +46,7 @@ function renderLevel() {
         levelInfo.classList.remove('flash')
     }, 1000)
 }
-
 /** contador de tiempo */
-const timeElement = document.getElementById('time')
-let startTime = 0 // El contador empieza desde 0 segundos
 function renderTime() {
     timeElement.textContent = formatTime(startTime)
     startTime++
@@ -33,14 +57,6 @@ function formatTime(seconds) {
     return `${minutes}:${secs < 10 ? '0' : ''}${secs}` // Formato MM:SS
 }
 
-let magicSpellCooldown = 200 // retraso de ataque en ms
-
-let spellPool = [] // Pool para proyectiles
-let poolSize = 30  // Cantidad de proyectiles en el pool
-// Crear el pool con proyectiles inactivos
-for (let i = 0; i < poolSize; i++) {
-    spellPool.push(new MagicSpell()) // Crear inactivos
-}
 function getMagicSpellFromPool() {
     // Encontrar el primer proyectil inactivo en el pool
     for (let i = 0; i < spellPool.length; i++) {
@@ -52,7 +68,7 @@ function getMagicSpellFromPool() {
 }
 
 function playerAttack() {
-    if (!player.canAttack || player.isJumping) return // Verificar si el jugador puede atacar
+    if (!player.canAttack() || player.isJumping()) return // Verificar si el jugador puede atacar
 
     player.attack() // Ejecutar la función de ataque del jugador
 
@@ -64,14 +80,13 @@ function playerAttack() {
     }
 
     // Poner en cooldown el ataque
-    player.canAttack = false // Cambiar la bandera a false
+    player.setCanAttack(false) // Cambiar la bandera a false
     setTimeout(() => {
-        player.canAttack = true // Permitir atacar de nuevo después del cooldown
+        player.setCanAttack(true) // Permitir atacar de nuevo después del cooldown
     }, magicSpellCooldown)
 }
 
 /** controles del juego */
-document.addEventListener('keydown', keyDownHandler)
 function keyDownHandler(event) {
     const { key } = event
     switch (key) {
@@ -84,10 +99,6 @@ function keyDownHandler(event) {
         case 'X':
             playerAttack()
             break
-
-        default:
-            // Si se presiona alguna otra tecla
-            break
     }
 }
 
@@ -98,7 +109,7 @@ function gameLoop() {
     enemies = enemies.filter(enemy => enemy.active) // Eliminar enemigos inactivos
     enemies.forEach(enemy => enemy.update())
 
-    obstacles = obstacles.filter(obstacle => obstacle.active) // Eliminar enemigos inactivos
+    obstacles = obstacles.filter(obstacle => obstacle.active) // Eliminar obstaculos inactivos
     obstacles.forEach(obstacle => obstacle.update())
 
     if(player.isDead())
@@ -125,18 +136,17 @@ function endGame() {
     clearTimeout(bonusTimeoutId)
     clearTimeout(levelTimeoutId)
     clearInterval(gameTimeId)
-    // Detener el juego y la generación de objetos
+    
     cancelAnimationFrame(gameLoop)  // Detiene el ciclo del juego
 
+    // Pantalla Game Over
     document.getElementById('game-over-modal').classList.remove('hide-modal')
-
     document.getElementById('round-score').textContent = 'Tu puntuación: '+ gameScore
-
     document.getElementById('max-score').textContent = 'Record actual: '+ saveLocalStorage(gameScore)
-
     document.getElementById('restart-game').addEventListener('click', restartGame)
 }
 
+// Guardar mejor puntiación en localStorage
 function saveLocalStorage(storageRecord) {
     if (localStorage.getItem('maxRecord')===null) {
         localStorage.setItem('maxRecord', storageRecord)
@@ -167,13 +177,6 @@ function restartGame() {
     startGame()
 }
 
-// Variables de generación
-let enemySpawnCooldown
-let obstacleSpawnCooldown
-let bonusSpawnCooldown
-
-let enemyTimeoutId, obstacleTimeoutId, bonusTimeoutId, levelTimeoutId, gameTimeId
-
 // Generadores automáticos
 function generateEnemy() {
     if (gameOver) return
@@ -201,7 +204,6 @@ function generateBonus() {
 }
 
 function startGame() {
-    // player = new Player()
     const newPlayer = new Player()  // Crea el jugador
     setPlayer(newPlayer)  // Asigna el nuevo jugador al contexto
 
@@ -230,15 +232,11 @@ function startGame() {
 
 }
 
+// Botón para iniciar juego
 document.getElementById('skip-modal').addEventListener('click', ()=> {
     document.getElementById('modal').classList.add('hide-modal')
     startGame()
 })
-
-let level
-let levelUpInterval = 20000 // Cada 20 segundos sube de nivel
-let speedMultiplier = 1 // Comenzar con multiplicador 1x
-let spawnRateMultiplier = 1 // Comenzar con multiplicador 1x
 
 function increaseGameLevel() {
     level++
@@ -258,7 +256,6 @@ function increaseGameLevel() {
     enemySpawnCooldown *= spawnRateMultiplier
     obstacleSpawnCooldown *= spawnRateMultiplier
 
-    console.log(`Nivel: ${level} | Velocidad: ${speedMultiplier}x | Frecuencia: ${spawnRateMultiplier}x`)
     renderLevel()
     // Llamar nuevamente en el próximo intervalo de tiempo
     levelTimeoutId = setTimeout(increaseGameLevel, levelUpInterval)

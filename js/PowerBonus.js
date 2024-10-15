@@ -22,7 +22,6 @@ export class PowerBonus {
     update() {
         if (!this.active) return
 
-        // Mover el bonus hacia la izquierda
         this.x -= this.speed
         this.element.style.left = `${this.x}px`
 
@@ -45,7 +44,7 @@ export class PowerBonus {
         return (
             bonusRect.left < playerRect.right - playerRect.width/2 &&
             bonusRect.right > playerRect.left &&
-            this.player.getIniTop() > playerRect.top
+            this.player.isJumping()
         )
     }
 

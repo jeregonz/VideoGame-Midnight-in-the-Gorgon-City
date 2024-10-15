@@ -20,7 +20,7 @@ export class MagicSpell {
         const projectile = document.createElement('div')
         projectile.classList.add('magic-spell')
         projectile.style.left = `${this.x}px`
-        this.container.appendChild(projectile) // Agregar al contenedor
+        this.container.appendChild(projectile)
         return projectile
     }
 
@@ -37,11 +37,10 @@ export class MagicSpell {
             // Si detecta colisión
             if (Math.abs(spellCenterX - enemyCenterX) < collisionDistance) {
                 enemy.takeDamage(this.damageAmount) // Infligir daño
-                renderGameScore(this.damageAmount)
-                return true // Devuelve el enemigo si hay colisión
+                renderGameScore(this.damageAmount) // Actualizar puntaje
+                return true
             }
         }
-
         return false
     }
 
@@ -57,17 +56,13 @@ export class MagicSpell {
         this.element.style.display = 'none' // Hacerlo invisible
     }
 
-    // Método update que será llamado dentro del game loop
     update() {
-        // Mover el proyectil
         this.x += this.speed
         this.element.style.left = `${this.x}px`
 
         // Comprobar colisión con el enemigo
         if (this.checkCollision()) {
             this.destroy()
-            // this.target.takeDamage(this.damageAmount) // Infligir daño
-            renderGameScore(this.damageAmount) // Actualizar puntaje
         }
 
         // Si sale de la pantalla, eliminar el proyectil

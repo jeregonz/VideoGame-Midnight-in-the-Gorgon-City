@@ -9,7 +9,7 @@ export class Gorgon extends Character {
         this.x = window.innerWidth
         this.player = player
         this.speed = 5
-        this.damageAmount = 10
+        this.damageAmount = 20
         this.container = gameContainer
         this.element = this.createElement()
         this.active = true
@@ -33,18 +33,15 @@ export class Gorgon extends Character {
     update() {
         if (!this.active) return
 
-        // Mover el obstáculo hacia la izquierda
         this.x -= this.speed
         this.element.style.left = `${this.x}px`
 
-        // Detectar colisiones con el jugador
         if (this.detectCollision()) {
             this.player.takeDamage(this.damageAmount)
             this.destroy()
             renderGameScore(-this.damageAmount/2)
         }
 
-        // Si sale de la pantalla, remover
         if (this.x < -this.element.offsetWidth) {
             this.destroy()
             renderGameScore(this.damageAmount)
@@ -78,18 +75,16 @@ export class Gorgon extends Character {
     }
 
     die(){
-        console.log(`${this.constructor.name} ha muerto.`)
-        // Aquí puedes manejar la lógica de la muerte (ej: remover del DOM, animación de muerte, etc.)
         this.dieAnimation()
         this.speed = 0
-        setTimeout(() => {
-            this.destroy() // Eliminar del DOM si es necesario
-        }, 400);
     }
     
     dieAnimation(){
         this.clean()
         this.addClass('gorgon-die')
+        this.element.addEventListener("animationend", () => {
+            this.destroy()
+        })
     }
 
     hurt(){

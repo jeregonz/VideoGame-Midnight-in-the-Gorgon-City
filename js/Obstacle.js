@@ -15,25 +15,22 @@ export class Obstacle {
         const obstacle = document.createElement('div')
         obstacle.classList.add('obstacle')
         obstacle.style.left = `${this.x}px`
-        this.container.appendChild(obstacle) // Agregar al contenedor
+        this.container.appendChild(obstacle)
         return obstacle
     }
 
     update() {
         if (!this.active) return
 
-        // Mover el obstáculo hacia la izquierda
         this.x -= this.speed
         this.element.style.left = `${this.x}px`
 
-        // Detectar colisiones con el jugador
         if (this.detectCollision()) {
             this.player.takeDamage(this.damageAmount)
             this.destroy()
             renderGameScore(-this.damageAmount/2)
         }
 
-        // Si sale de la pantalla, remover el obstáculo
         if (this.x < -this.element.offsetWidth) {
             this.destroy()
             renderGameScore(this.damageAmount)
@@ -45,7 +42,6 @@ export class Obstacle {
 
         const playerRect = this.player.getDOMInfo()
 
-        // Comparar las posiciones para detectar colisión
         return (
             obstacleRect.left < playerRect.right - playerRect.width/2 &&
             obstacleRect.right > playerRect.left + playerRect.width/2 &&
