@@ -35,9 +35,9 @@ let bonusSpawnCooldown
 let enemyTimeoutId, obstacleTimeoutId, bonusTimeoutId, levelTimeoutId, gameTimeId
 
 let level
-let levelUpInterval = 20000 // Cada 20 segundos sube de nivel
-let speedMultiplier = 1 // Comenzar con multiplicador 1x
-let spawnRateMultiplier = 1 // Comenzar con multiplicador 1x
+let levelUpInterval = 15000 // Cada 15 segundos sube de nivel
+let speedMultiplier = 1 // Multiplicador de velocidad enemigos y obstaculos
+let spawnRateMultiplier = 1 // Multiplicador de aparicion de enemigos y obstaculos
 
 function renderLevel() {
     levelInfo.textContent = 'Nivel: ' + level
@@ -181,7 +181,7 @@ function restartGame() {
 function generateEnemy() {
     if (gameOver) return
 
-    let newEnemy = new Gorgon()
+    let newEnemy = new Gorgon(speedMultiplier)
     enemies.push(newEnemy)
     enemyTimeoutId = setTimeout(generateEnemy, enemySpawnCooldown + Math.random() * 2000)
 }
@@ -189,7 +189,7 @@ function generateEnemy() {
 function generateObstacle() {
     if (gameOver) return
 
-    let newObstacle = new Obstacle()
+    let newObstacle = new Obstacle(speedMultiplier)
     obstacles.push(newObstacle)
     obstacleTimeoutId = setTimeout(generateObstacle, obstacleSpawnCooldown + Math.random() * 2000)
 }
@@ -240,17 +240,8 @@ document.getElementById('skip-modal').addEventListener('click', ()=> {
 
 function increaseGameLevel() {
     level++
-    speedMultiplier += 0.2 // Aumenta un 20% la velocidad
-    spawnRateMultiplier -= 0.1 // Aumenta la frecuencia reduciendo el cooldown
-
-    // Aumentar la velocidad de los enemigos y obstáculos
-    enemies.forEach(enemy => {
-        enemy.speed *= speedMultiplier
-    })
-
-    obstacles.forEach(obstacle => {
-        obstacle.speed *= speedMultiplier
-    })
+    speedMultiplier += 0.2 // Aumenta un 20% la velocidad enemigos y obstaculos
+    spawnRateMultiplier -= 0.1 // Aumenta la frecuencia de aparicion de enemigos y obstaculos
 
     // Ajustar la frecuencia de generación de enemigos y obstaculos
     enemySpawnCooldown *= spawnRateMultiplier

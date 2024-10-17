@@ -1,14 +1,16 @@
 import { Character } from "./Character.js";
 import { gameContainer, player, renderGameScore } from "./Context.js";
 
+const iniSpeed = 5
+
 export class Gorgon extends Character {
 
-    constructor() {
+    constructor(speedMultiplier) {
         super(100)
         this.totalHealth = 100
         this.x = window.innerWidth
         this.player = player
-        this.speed = 5
+        this.speed = iniSpeed * speedMultiplier
         this.damageAmount = 20
         this.container = gameContainer
         this.element = this.createElement()

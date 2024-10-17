@@ -1,10 +1,12 @@
 import { gameContainer, player, renderGameScore } from "./Context.js"
 
+const iniSpeed = 6
+
 export class Obstacle {
-    constructor() {
+    constructor(speedMultiplier) {
         this.x = window.innerWidth
         this.player = player
-        this.speed = 6
+        this.speed = iniSpeed * speedMultiplier
         this.damageAmount = 10
         this.container = gameContainer
         this.element = this.createElement()
